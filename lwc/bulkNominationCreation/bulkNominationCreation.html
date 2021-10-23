@@ -1,0 +1,78 @@
+<template>
+    <lightning-card>
+    <div class="slds-card" style="font-family: 'Open Sans', sans-serif">
+
+        <!-- Header -->
+        <header class="slds-card__header slds-media slds-media_center">
+            <div class="slds-media__figure">
+                <lightning-icon icon-name="standard:contact" size="small"></lightning-icon>
+            </div>
+            <div class="slds-media__body slds-card__header-title slds-text-title_bold" style="font-size: 14px">
+                Nomination Creation
+            </div>
+        </header>
+
+        <!-- Table -->
+        <div class="slds-grid custom-box slds-border_bottom" >
+            <div class="slds-m-around_x-small">
+                <div class="slds-m-left_small">Nr.</div>
+            </div>
+            
+            <div class="slds-size_1-of-5 slds-m-left_medium">
+                <div class="slds-text-align_center slds-m-around_x-small">Nomination Name</div>
+            </div>
+
+            <div class="slds-size_1-of-5 slds-m-left_medium">
+                <div class="slds-text-align_center slds-m-around_x-small">Campaign</div>
+            </div>
+
+        </div>
+        <br>
+        <div class="slds-scrollable_y" style="height:30rem">
+            <template for:each={itemList} for:item="item" for:index="index">
+            <lightning-record-edit-form key={item.id} object-api-name="Nomination__c" record-id={item.recordId}>
+                <lightning-layout multiple-rows> 
+
+                <lightning-layout-item  class="slds-m-around_x-small" padding="around-small">
+                        <lightning-formatted-number value={item.id}></lightning-formatted-number>.
+                </lightning-layout-item>
+
+                    <template for:each={item.fields} for:item="field">
+                        <div class="slds-size_1-of-5 slds-m-left_medium" key={field} >
+                        <lightning-layout-item  flexibility="auto" padding="around-small">
+                            <lightning-input-field field-name={field.fieldName} label="" variant="label-hidden" value={field.value} name={field.fieldName} required>
+                            </lightning-input-field>
+                        </lightning-layout-item>
+                        </div>
+                    </template>
+                    
+                    <div class="slds-size_1-of-5 slds-m-left_medium">
+                        <lightning-layout-item  flexibility="auto" padding="around-small">
+                            <div class="slds-form-element">
+                                <div class="slds-form-element__control">
+                                  <input type="text"  placeholder={campaignName} disabled="" class="slds-input" />
+                                </div>
+                              </div>
+                        </lightning-layout-item>
+                    </div>
+
+                    <lightning-layout-item flexibility="auto"  padding="around-small" class="slds-m-around_x-small">
+                        <lightning-button-icon icon-name="utility:delete" alternative-text="Remove" title="Remove"
+                        access-key={item.id} id={index} onclick={removeRow}></lightning-button-icon>
+                    </lightning-layout-item>
+
+                </lightning-layout>
+            </lightning-record-edit-form>
+            </template>
+        </div>
+        <div class="slds-p-left_small slds-p-vertical_small">
+            <lightning-button variant="neutral" label="add row" title="add row" icon-name="utility:add" onclick={addRow}></lightning-button>
+        </div>
+
+        <!-- Footer -->
+        <footer class="slds-modal__footer" style="padding: 0.50rem 1rem;">
+            <lightning-button icon-name="utility:save" label="Save" title="Save" variant="brand" onclick={handleSubmit}></lightning-button>
+        </footer>
+    </div>
+</lightning-card>
+</template>

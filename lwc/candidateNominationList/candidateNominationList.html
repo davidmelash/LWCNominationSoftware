@@ -1,0 +1,93 @@
+<template>
+  <div class="slds-modal__content">
+      <lightning-input type="search"
+      onchange={handleSearchTermChange}
+      variant="label-hidden"
+      class="slds-var-m-bottom_medium slds-m-around_medium"
+      label="Search"
+      placeholder="Search for nominees"
+      value={searchTerm}>
+    </lightning-input>
+                <div class=" slds-grow">
+                  <div class="slds-scrollable">
+                    <table aria-multiselectable="true" class="slds-table slds-no-row-hover slds-table_bordered slds-table_fixed-layout slds-table_resizable-cols" role="grid" aria-label="Example product list">
+                      <thead>
+                        <tr class="slds-line-height_reset">
+                          <th class="" scope="col" style="width:3.75rem"></th>
+                          <th aria-label="Candidate Nomination" aria-sort="none" class="slds-is-resizable slds-is-sortable" scope="col">
+                            <a class="slds-th__action slds-text-link_reset" href="#" role="button" tabindex="-1">
+                              <div class="slds-grid slds-grid_vertical-align-center slds-has-flexi-truncate">
+                                <span class="slds-truncate" title="Candidate Nomination">Candidate Nomination</span>
+                              </div>
+                            </a>
+                            <div class="slds-resizable">
+                              <span class="slds-resizable__handle">
+                                <span class="slds-resizable__divider"></span>
+                              </span>
+                            </div>
+                          </th>
+                          <th aria-label="Nomination" aria-sort="none" class="slds-is-resizable slds-is-sortable" scope="col">
+                            <a class="slds-th__action slds-text-link_reset" href="#" role="button" tabindex="-1">
+                              <div class="slds-grid slds-grid_vertical-align-center slds-has-flexi-truncate">
+                                <span class="slds-truncate" title="Nomination">Nomination</span>
+                              </div>
+                            </a>
+                            <div class="slds-resizable">
+                              <span class="slds-resizable__handle">
+                                <span class="slds-resizable__divider"></span>
+                              </span>
+                            </div>
+                          </th>
+                          <th aria-label="Description" aria-sort="none" class="slds-is-resizable slds-is-sortable" scope="col">
+                            <a class="slds-th__action slds-text-link_reset" href="#" role="button" tabindex="-1">
+                              <div class="slds-grid slds-grid_vertical-align-center slds-has-flexi-truncate">
+                                <span class="slds-truncate" title="Description">Description</span>
+                              </div>
+                            </a>
+                            <div class="slds-resizable">
+                              <span class="slds-resizable__handle">
+                                <span class="slds-resizable__divider"></span>
+                              </span>
+                            </div>
+                          </th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <template for:each={nominees.data} for:item="item">
+                            <tr key={item.Id} access-key={item.Id} aria-selected="true" class="slds-hint-parent" >
+                                <td class="slds-text-align_right" role="gridcell">
+                                    <lightning-input type="checkbox-button" label="select" variant="label-hidden" onchange={handleCheck} name={item.Id} ></lightning-input>
+                                </td>
+                                <td role="gridcell">
+                                    <div class="slds-cell-wrap" title="Nominee">
+                                        {item.Nominee__r.FirstName}
+                                        {item.Nominee__r.LastName}
+                                    </div>
+                                </td>
+                                <td role="gridcell">
+                                    <div class="slds-cell-wrap" title="Nomination">
+                                        {item.Nomination__r.Name}
+                                    </div>
+                                </td>
+                                <td role="gridcell">
+                                    <div class="slds-cell-wrap" title="Nominee">
+                                        {item.Description__c}
+                                    </div>
+                                </td>
+                                
+                            </tr>
+                        </template>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+
+
+                <footer class="slds-modal__footer">
+                  <lightning-button label="Cancel" onclick={closeNomineeList}></lightning-button>
+                  &nbsp;
+                  <lightning-button variant="brand" onclick={handleSave} label="Save" ></lightning-button>
+                </footer>
+              
+    </div>
+</template>

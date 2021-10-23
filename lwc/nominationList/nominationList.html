@@ -1,0 +1,64 @@
+<template>
+    <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true" aria-describedby="modal-content-id-1" class="modalSection slds-modal slds-fade-in-open">
+        <div class="slds-modal__container">
+         <!--Modal Header Start-->
+          <header class="slds-modal__header">
+            <button class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse" title="Close">
+              <lightning-icon variant="inverse" onclick={closeModal} alternative-text="close" icon-name="utility:close" size="small"></lightning-icon>
+            </button>
+            <template if:false={showCandidateNomination}>
+              <h2 id="modal-heading-01" class="slds-modal__title slds-hyphenate">Please, choose nomination.</h2>
+            </template>
+            <template if:true={showCandidateNomination}>
+              <h2 id="modal-heading-02" class="slds-modal__title slds-hyphenate">Time to vote.</h2>
+            </template>
+            
+          </header>
+         <!--Modal Body Start-->
+         
+            <template if:true={showCandidateNomination}>
+              <c-candidate-nomination-list
+              onclose={closeCandidateNominationList}
+              nomination-id={nominationId}>
+              </c-candidate-nomination-list>
+            </template>
+            
+            <template if:false={showCandidateNomination}>
+              <div class="slds-modal__content" style="align-items: center;">
+                <div class="slds-align_absolute-center">
+                    <div class="slds-form-element__control">
+                      <template for:each={nominations} for:item="nomination">
+                        <div class="slds-visual-picker slds-visual-picker_small slds-m-around_large" key={nomination.Id}  >
+                          <input onclick={showCandidateNominationList} type="radio" id={nomination.Id} name='nomination' />
+                          <label for={nomination.Id}>
+                            <span class="slds-visual-picker__figure slds-visual-picker__text slds-align_absolute-center ">
+
+                              
+                                <span class="slds-icon_container">
+                                  <lightning-icon  icon-name="standard:campaign"  size="large"  variant="inverse">
+                                  </lightning-icon>
+                                </span>
+                            </span>
+                            <span class="slds-icon_container slds-visual-picker__text-check">
+                              <lightning-icon  icon-name="utility:check"  size="xx-small"  variant="inverse">
+                              </lightning-icon>
+                            </span>
+                            
+                            <span class="slds-visual-picker__body">
+                              <span class="slds-text-heading_small">{nomination.Name}</span>
+                            </span>
+                          </label>
+                        </div>
+                      </template>
+        
+                    </div>
+                  </div>
+                  <footer class="slds-modal__footer">
+                    <lightning-button label="Cancel" onclick={closeModal}></lightning-button>
+                  </footer>
+                </div>
+            </template>
+          </div>
+      </section>
+      <div class="backdropDiv slds-backdrop slds-backdrop_open"></div>
+</template>

@@ -1,0 +1,28 @@
+<template>
+    <template if:true={isCandidates}>
+        <c-bulk-candidate-creation campaign-id={recordId} id-account={getIdAccount}>
+        </c-bulk-candidate-creation>
+    </template>
+    <template if:true={isNominatios}>
+        <c-bulk-nomination-creation campaign-id={recordId} campaign-name={getCampaignName}>
+        </c-bulk-nomination-creation>
+    </template>
+    <template if:true={isNominees}>
+        <c-bulk-candidate-nomination campaign-id={recordId}>
+        </c-bulk-candidate-nomination>
+    </template>
+    <template if:true={isVote}>
+        <lightning-card>
+            <div class="slds-align_absolute-center">
+                <p class="slds-text-heading_large">Thanks for your work!</p>
+            </div>
+            <!-- <template if:true={contacts.data}>
+                <template for:each={getContacts} for:item="contact">
+                     <p key={contact.Id}>{contact.FirstName} / {contact.LastName} / {contact.Email} / {contact.AccountId}</p>
+                </template>
+            </template>  -->
+            
+                <!-- <p>{getContacts}</p> -->
+        </lightning-card>
+    </template>
+</template>
