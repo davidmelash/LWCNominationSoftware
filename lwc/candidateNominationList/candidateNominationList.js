@@ -1,25 +1,26 @@
 import { LightningElement, api, wire, track} from 'lwc';
 import searchNominees from '@salesforce/apex/CandidateListController.searchNominees';
 import checkVoteDuplicate from '@salesforce/apex/CandidateListController.checkVoteDuplicate';
+import getUserContactId from '@salesforce/apex/CandidateListController.getUserContactId';
 import { createRecord, deleteRecord} from 'lightning/uiRecordApi';
 import { ShowToastEvent } from 'lightning/platformShowToastEvent';
 import CANDIDATE_FIELD from '@salesforce/schema/Vote__c.Candidate__c';
-// import NOMINATION_FIELD from '@salesforce/schema/Vote__c.Nomination__c';
 import DESCRIPTION_FIELD from '@salesforce/schema/Vote__c.Description__c';
 import VOTER_FIELD from '@salesforce/schema/Vote__c.Voter__c';
 import VOTE_OBJECT from '@salesforce/schema/Vote__c';
+
 
 export default class CandidateNominationList extends LightningElement {
     @api nominationId;
     nominees;
     nomineeId;
-    voterId = '0030900000ZxmlsAAB'; // for tests
+    // voterId = '0030900000ZxmlsAAB'; // for tests
     searchTerm = ''
+
     
     @wire(searchNominees, { nominationId: '$nominationId', searchTerm: '$searchTerm'})
     wiredObject(result) {
         if (result) {
-            console.log('data true', result)
             this.nominees = result;
         }
     }
@@ -52,12 +53,13 @@ export default class CandidateNominationList extends LightningElement {
 
 
     async handleSave(){
+        let voterId = await getUserContactId();
         let voteRecordId = await this.getVoteId();
         let successfulVoteMessage = 'Vote created'
         const fields = {};
         fields[CANDIDATE_FIELD.fieldApiName] = this.nomineeId;
         fields[DESCRIPTION_FIELD.fieldApiName] = 'Lorem Ipsum is simply dummy text of the printing and typesetting industry';
-        fields[VOTER_FIELD.fieldApiName] = this.voterId;
+        fields[VOTER_FIELD.fieldApiName] = voterId;
         const recordInput = { apiName: VOTE_OBJECT.objectApiName, fields };
 
         if(voteRecordId){
@@ -67,9 +69,9 @@ export default class CandidateNominationList extends LightningElement {
         this.createVoteRecord(recordInput, successfulVoteMessage);
     }
 
-    async getVoteId(){
+    async getVoteId(voterId){
         
-        let voteRecordId = await checkVoteDuplicate({nominationId: this.nominationId, voterId: this.voterId}).then(result => {
+        let voteRecordId = await checkVoteDuplicate({nominationId: this.nominationId, voterId: voterId}).then(result => {
             if(result){
                 return result[0].Id;
             }

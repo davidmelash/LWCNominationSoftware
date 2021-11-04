@@ -13,17 +13,30 @@ function addRow() {
 
 function removeRow(event) {
         if (this.itemList.length >= 2) {
+            let recordToDelete = '';
             --this.keyIndex;
             this.itemList = this.itemList.filter(function (element) {
                 if(parseInt(element.id) === parseInt(event.target.accessKey)){
                     if(element.recordId){
-                        deleteRecord(element.recordId)
-
+                        recordToDelete = element.recordId
                     }
                     return false;
                 }
                 return true;
             });
+            if(recordToDelete){
+                deleteRecord(recordToDelete)
+                .then(()=>{
+                    this.dispatchEvent(
+                        new ShowToastEvent({
+                            title: 'Success',
+                            message: 'Successfully deleted',
+                            variant: 'success'})
+                    )
+                })
+                recordToDelete = '';
+            }
+
         }
     }
 

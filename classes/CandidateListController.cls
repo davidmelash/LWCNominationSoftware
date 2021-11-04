@@ -2,10 +2,14 @@ public without sharing class CandidateListController {
     @AuraEnabled(cacheable=true)
     public static List<Campaign> getCampaigns() {
         Date currentDate = date.today();
+        Id userId = getCurrentUserId();
+        User currentUser = [SELECT CompanyName FROM User WHERE Id = :userId];
+
         return [
             SELECT Name, StartDate, EndDate
             FROM Campaign
-            WHERE EndDate >= :currentDate AND IsActive = true AND Stage__c = 'Vote'
+            WHERE EndDate >= :currentDate AND IsActive = true AND Stage__c = 'Vote' 
+            AND Company__r.Name = :currentUser.CompanyName
             ORDER BY Name
         ];
     }
@@ -20,7 +24,7 @@ public without sharing class CandidateListController {
     @AuraEnabled(cacheable=true)
     public static List<CandidateNomination__c> getAllNominees(Id nominationId) {
         return [
-            SELECT Nominee__r.FirstName, Nominee__r.LastName, Nomination__r.Name, Description__c
+            SELECT FullName__c,Nominee__r.FirstName, Nominee__r.LastName, Nomination__r.Name, Description__c
             FROM CandidateNomination__c
             WHERE Nomination__c = :nominationId
         ];
@@ -52,4 +56,17 @@ public without sharing class CandidateListController {
         ];
         return record;
     }
+
+    public static Id getCurrentUserId() {
+        return UserInfo.getUserId();
+    }
+    
+    @AuraEnabled
+    public static Id getUserContactId(){
+        Id userId = getCurrentUserId();
+        User currentUser = [SELECT ContactId FROM User WHERE Id = :userId];
+        return currentUser.ContactId;
+    }
+
+
 }
